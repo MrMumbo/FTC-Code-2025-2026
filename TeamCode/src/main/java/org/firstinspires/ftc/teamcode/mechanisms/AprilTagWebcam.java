@@ -10,6 +10,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.annotation.SuppressLint;
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -48,6 +50,7 @@ public class AprilTagWebcam {
         return detectedTags;
     }
 
+    @SuppressLint("DefaultLocale")
     public void displayDetectionTelemetry(AprilTagDetection detectedId) {
         if (detectedId == null) {return;}
         if (detectedId.metadata != null) {

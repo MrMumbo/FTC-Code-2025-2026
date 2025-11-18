@@ -11,17 +11,48 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">5dp</dimen>
     <string name="about_menu_item">About</string>
+    <string name="appThemeChangeRestartNotifyRC">
+        Theme changed – restarting Robot Controller to apply changes.
+    </string>
     <string name="app_name">FTC Robot Controller</string>
     <string name="blocks_menu_item">Blocks</string>
     <string name="configure_robot_menu_item">Configure Robot</string>
     <string name="exit_menu_item">Exit</string>
     <string name="inspection_mode_menu_item">Self Inspect</string>
     <string name="packageName">@string/packageNameRobotController</string>
+    <string name="permAccessLocationExplain">
+        Location access is required for Wi-Fi and network features used by the Robot Controller app.
+    </string>
+    <string name="permGenericExplain">
+        This permission is required for the Robot Controller app to function correctly.
+    </string>
+    <string name="permRcCameraExplain">
+        The Robot Controller app uses the camera for vision processing and needs permission to access it.
+    </string>
+    <string name="permRcReadExternalStorageExplain">
+        The Robot Controller app needs permission to read files from storage so it can load logs and configuration files.
+    </string>
+    <string name="permRcWriteExternalStorageExplain">
+        The Robot Controller app needs permission to write files to storage so it can save logs and configuration files.
+    </string>
+    <string name="permReadPhoneState">
+        The app needs permission to read basic phone state information required for proper operation.
+    </string>
+    <string name="pref_app_theme">pref_app_theme</string>
     <string name="pref_ftc_season_year_of_current_rc" translatable="false">pref_ftc_season_year_of_current_rc_new</string>
+    <string name="pref_pairing_kind">pref_pairing_kind</string>
+    <string name="pref_rc_connected">pref_rc_connected</string>
+    <string name="pref_warn_about_2_4_ghz_band">pref_warn_about_2_4_ghz_band</string>
+    <string name="pref_warn_about_incorrect_clocks">pref_warn_about_incorrect_clocks</string>
+    <string name="pref_warn_about_mismatched_app_versions">pref_warn_about_mismatched_app_versions</string>
+    <string name="pref_warn_about_obsolete_software">pref_warn_about_obsolete_software</string>
+    <string name="pref_wifi_automute">pref_wifi_automute</string>
     <string name="program_and_manage_menu_item">Program &amp; Manage</string>
     <string name="restart_robot_menu_item">Restart Robot</string>
     <string name="settings_menu_item">Settings</string>
+    <string name="toastRestartRobotComplete">Robot restart complete.</string>
     <string name="toastRestartingRobot">Restarting Robot</string>
+    <string name="toastRobotSetupComplete">Robot setup complete.</string>
     <string name="toastWifiConfigurationComplete">Configuration Complete</string>
     <string name="toastWifiUpBeforeProgrammingMode">The Robot Controller must be fully up and running before entering Program and Manage Mode.</string>
     <style name="AppThemeBlueRC" parent="AppTheme.Blue">

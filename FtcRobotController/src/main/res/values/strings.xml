@@ -68,5 +68,57 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string translatable="false" name="pref_ftc_season_year_of_current_rc">pref_ftc_season_year_of_current_rc_new</string>
 
   <string name="packageName">@string/packageNameRobotController</string>
+    <!-- Added to satisfy FtcRobotControllerActivity / settings code -->
+    <string name="pref_rc_connected">pref_rc_connected</string>
+
+    <string name="pref_warn_about_2_4_ghz_band">pref_warn_about_2_4_ghz_band</string>
+    <string name="pref_warn_about_obsolete_software">pref_warn_about_obsolete_software</string>
+    <string name="pref_warn_about_mismatched_app_versions">pref_warn_about_mismatched_app_versions</string>
+    <string name="pref_warn_about_incorrect_clocks">pref_warn_about_incorrect_clocks</string>
+
+    <string name="pref_wifi_automute">pref_wifi_automute</string>
+    <string name="pref_pairing_kind">pref_pairing_kind</string>
+
+    <!-- Toast shown after restarting robot from the menu -->
+    <string name="toastRestartRobotComplete">Robot restart complete.</string>
+
+    <!-- App theme preference + restart message -->
+    <string name="pref_app_theme">pref_app_theme</string>
+    <string name="appThemeChangeRestartNotifyRC">
+        Theme changed – restarting Robot Controller to apply changes.
+    </string>
+
+    <!-- Missing strings used by FtcRobotControllerActivity & PermissionValidatorWrapper -->
+
+    <!-- Toast after initial robot setup completes -->
+    <string name="toastRobotSetupComplete">Robot setup complete.</string>
+
+    <!-- Permission explanation strings shown in PermissionValidatorWrapper -->
+    <string name="permRcWriteExternalStorageExplain">
+        The Robot Controller app needs permission to write files to storage so it can save logs and configuration files.
+    </string>
+
+    <string name="permRcReadExternalStorageExplain">
+        The Robot Controller app needs permission to read files from storage so it can load logs and configuration files.
+    </string>
+
+    <string name="permRcCameraExplain">
+        The Robot Controller app uses the camera for vision processing and needs permission to access it.
+    </string>
+
+    <string name="permAccessLocationExplain">
+        Location access is required for Wi-Fi and network features used by the Robot Controller app.
+    </string>
+
+    <string name="permReadPhoneState">
+        The app needs permission to read basic phone state information required for proper operation.
+    </string>
+
+    <string name="permGenericExplain">
+        This permission is required for the Robot Controller app to function correctly.
+    </string>
+
+
+
 
 </resources>

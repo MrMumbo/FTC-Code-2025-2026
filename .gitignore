@@ -1,0 +1,13 @@
+# Ignore Gradle build output
+FtcRobotController/build/
+TeamCode/build/
+build/
+.gradle/
+.idea/
+
+# Android Studio stuff
+local.properties
+*.iml
+
+# Windows long-path fix
+**/.transforms/
