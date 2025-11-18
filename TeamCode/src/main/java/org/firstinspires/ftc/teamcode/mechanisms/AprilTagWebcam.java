@@ -6,7 +6,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import android.util.Size;
 
 public class AprilTagWebcam {
     private AprilTagProcessor aprilTagProcessor;
