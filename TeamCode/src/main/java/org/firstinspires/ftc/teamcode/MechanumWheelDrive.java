@@ -11,7 +11,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import java.util.List;
 
 @TeleOp(name="Robot: Teleop Tank", group="Robot")
-public class MecnumWheelDrive extends OpMode {
+public class MechanumWheelDrive extends OpMode {
 
     // AprilTag helper
     private AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();

@@ -11,3 +11,15 @@ local.properties
 
 # Windows long-path fix
 **/.transforms/
+
+# Android Studio
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+
+# APKs / binaries
+*.apk
+*.aab
+*.jar
+*.aar
