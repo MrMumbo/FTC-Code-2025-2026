@@ -39,7 +39,7 @@ public class MechanumWheelDrive extends OpMode {
         float rotationalMovement =  gamepad1.right_stick_x;
         float xButton            =  gamepad1.x ? 1.0f : 0.0f;
         float maxPower           = 0.5f + (xButton / 2.0f);
-        double maxShoot           = aprilTagWebcam.distanceToAprilTag / 10;
+        double maxShoot           = aprilTagWebcam.distanceToAprilTag / 100;
         float loadBall           = gamepad1.right_bumper ? 1.0f : 0.0f;
         float shootBall          = gamepad1.right_trigger;
 

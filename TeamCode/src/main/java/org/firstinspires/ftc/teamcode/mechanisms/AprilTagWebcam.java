@@ -22,6 +22,7 @@ public class AprilTagWebcam {
     private List<AprilTagDetection> detectedTags = new ArrayList<>();
     public double distanceToAprilTag;
     public double rotationToAprilTag;
+    public double aprilTagID;
 
     private Telemetry telemetry;
 
@@ -56,8 +57,9 @@ public class AprilTagWebcam {
     public void displayDetectionTelemetry(AprilTagDetection detectedId) {
         if (detectedId == null) {return;}
         if (detectedId.metadata != null) {
-            distanceToAprilTag = (detectedId.ftcPose.y)/10;
+            distanceToAprilTag = (detectedId.ftcPose.y);
             rotationToAprilTag = detectedId.ftcPose.bearing;
+            aprilTagID = detectedId.id;
             telemetry.addLine(String.format("\n==== (ID %d) %s", detectedId.id, detectedId.metadata.name));
             telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detectedId.ftcPose.x, detectedId.ftcPose.y, detectedId.ftcPose.z));
             telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detectedId.ftcPose.pitch, detectedId.ftcPose.roll, detectedId.ftcPose.yaw));

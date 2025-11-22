@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 /*
  * Simple ROBOT-relative mecanum teleop with shooter, intake, and servos.
@@ -16,6 +18,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  */
 @TeleOp(name = "Test : Do NOT Touch", group = "Test")
 public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
+    private AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
+
+    double frontLeftPower;
+    double backLeftPower;
+    double frontRightPower;
+    double backRightPower;
 
     // Drive motors
     private DcMotor frontLeft;
@@ -35,6 +43,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
     @Override
     public void init() {
+        aprilTagWebcam.init(hardwareMap, telemetry);
         // Map hardware (names must match your RC configuration)
         frontLeft   = hardwareMap.get(DcMotor.class,   "frontLeft");
         frontRight  = hardwareMap.get(DcMotor.class,   "frontRight");
@@ -72,15 +81,25 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
     @Override
     public void loop() {
-        // -------------------------
-        // CONTROLS
-        // -------------------------
-        // Left stick Y = forward/back  (up = forward)
-        // Left stick X = strafe        (right = strafe right)
-        // Right stick X = rotate       (right = turn clockwise)
+        aprilTagWebcam.update();
+
+        java.util.List<AprilTagDetection> detections = aprilTagWebcam.getDetectedTags();
+        telemetry.addData("Tag count", detections.size());
+
+        if (!detections.isEmpty()) {
+            AprilTagDetection tag = detections.get(0);
+            aprilTagWebcam.displayDetectionTelemetry(tag);
+
+            telemetry.addData("Tag ID", tag.id);
+            telemetry.addData("Tag range (in)", tag.ftcPose.range);
+        } else {
+            telemetry.addLine("No tags detected");
+        }
+
         double y  = -gamepad1.left_stick_y;  // forward/back
         double x  =  -gamepad1.left_stick_x;  // strafe
         double rx =  gamepad1.right_stick_x; // rotate
+        double aRx = aprilTagWebcam.rotationToAprilTag;
 
         if (gamepad1.triangle) {
             imu.resetYaw();
@@ -88,10 +107,19 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         driveFieldRelative((float) y, (float) x);
 
-        double frontLeftPower  = (rx + nY - nX);
-        double backLeftPower   = (nX + nY + rx);
-        double frontRightPower = (-nX - nY + rx);
-        double backRightPower  = (nX - nY + rx);
+        if(!gamepad1.left_bumper){
+            frontLeftPower  = (rx + nY - nX);
+            backLeftPower   = (nX + nY + rx);
+            frontRightPower = (-nX - nY + rx);
+            backRightPower  = (nX - nY + rx);
+        } else {
+            if(aprilTagWebcam.aprilTagID == 24){
+                frontLeftPower  = (aRx + nY - nX);
+                backLeftPower   = (nX + nY + aRx);
+                frontRightPower = (-nX - nY + aRx);
+                backRightPower  = (nX - nY + aRx);
+            }
+        }
 
         frontLeft.setPower(frontLeftPower);
         backLeft.setPower(backLeftPower);
@@ -129,6 +157,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         telemetry.addData("BR", "%.2f", backRightPower);
         telemetry.addData("Shooter velocity", "%.0f", shootMotor.getVelocity());
         telemetry.addData("IMU:", "%.2f", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        telemetry.addData("RotationToAprilTag", "%.2f", aprilTagWebcam.rotationToAprilTag);
+        telemetry.addData("RotationToAprilTag", "%.2f", aprilTagWebcam.aprilTagID);
         telemetry.update();
     }
 
@@ -144,5 +174,10 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         nY = (float) (Math.cos(theta) * magnitude);
         nX = (float) (Math.sin(theta) * magnitude);
+    }
+
+    @Override
+    public void stop() {
+        aprilTagWebcam.stop();
     }
 }
