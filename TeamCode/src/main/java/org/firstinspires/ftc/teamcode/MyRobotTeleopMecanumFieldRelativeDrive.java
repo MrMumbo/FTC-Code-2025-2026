@@ -99,7 +99,17 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         double y  = -gamepad1.left_stick_y;  // forward/back
         double x  =  -gamepad1.left_stick_x;  // strafe
         double rx =  gamepad1.right_stick_x; // rotate
-        double aRx = aprilTagWebcam.rotationToAprilTag;
+        double aRx;
+
+        if (detections.isEmpty()){
+            aRx = 0;
+        } else {
+            if (aprilTagWebcam.rotationToAprilTag > 0){
+                aRx = -(aprilTagWebcam.rotationToAprilTag / 30);
+            } else{
+                aRx = -(aprilTagWebcam.rotationToAprilTag / 30);
+            }
+        }
 
         if (gamepad1.triangle) {
             imu.resetYaw();
@@ -113,7 +123,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
             frontRightPower = (-nX - nY + rx);
             backRightPower  = (nX - nY + rx);
         } else {
-            if(aprilTagWebcam.aprilTagID == 24){
+            if(aprilTagWebcam.aprilTagID == 24 ){
                 frontLeftPower  = (aRx + nY - nX);
                 backLeftPower   = (nX + nY + aRx);
                 frontRightPower = (-nX - nY + aRx);
@@ -158,7 +168,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         telemetry.addData("Shooter velocity", "%.0f", shootMotor.getVelocity());
         telemetry.addData("IMU:", "%.2f", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("RotationToAprilTag", "%.2f", aprilTagWebcam.rotationToAprilTag);
-        telemetry.addData("RotationToAprilTag", "%.2f", aprilTagWebcam.aprilTagID);
+        telemetry.addData("AprilTagID", "%.2f", aprilTagWebcam.aprilTagID);
         telemetry.update();
     }
 

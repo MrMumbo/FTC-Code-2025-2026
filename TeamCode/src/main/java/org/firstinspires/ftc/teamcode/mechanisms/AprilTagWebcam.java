@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class AprilTagWebcam {
     private AprilTagProcessor aprilTagProcessor;
     private VisionPortal visionPortal;
-    private List<AprilTagDetection> detectedTags = new ArrayList<>();
+    public List<AprilTagDetection> detectedTags = new ArrayList<>();
     public double distanceToAprilTag;
     public double rotationToAprilTag;
     public double aprilTagID;
@@ -68,6 +68,8 @@ public class AprilTagWebcam {
             telemetry.addLine(String.format("\n==== (ID %d) Unknown", detectedId.id));
             telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detectedId.center.x, detectedId.center.y));
             distanceToAprilTag = 0;
+            rotationToAprilTag = 0;
+            aprilTagID = 0;
         }
     }
 
