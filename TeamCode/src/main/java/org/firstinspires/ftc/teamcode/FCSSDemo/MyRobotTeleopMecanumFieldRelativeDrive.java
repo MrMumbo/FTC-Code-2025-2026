@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.FCSSDemo;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -12,11 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-/*
- * Simple ROBOT-relative mecanum teleop with shooter, intake, and servos.
- * No field-relative drive, no IMU.
- */
-@TeleOp(name = "Test : Do NOT Touch", group = "Test")
+@TeleOp(name = "Test : Do NOT TOUCH", group = "Test")
 public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
     private AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
 
@@ -99,7 +95,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         double y  = -gamepad1.left_stick_y;  // forward/back
         double x  =  -gamepad1.left_stick_x;  // strafe
         double rx =  gamepad1.right_stick_x; // rotate
-        double aRx;
+        double aRx; //apriltag rotation
 
         if (detections.isEmpty()){
             aRx = 0;
@@ -136,12 +132,9 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         frontRight.setPower(frontRightPower);
         backRight.setPower(backRightPower);
 
-        // -------------------------
-        // SHOOTER / INTAKE / SERVOS
-        // -------------------------
-        // Shooter on right trigger, capped at ~1200 ticks/sec
+        //shooter motor capped at 1200 velocity
         if (gamepad1.right_trigger > 0.0) {
-            if (shootMotor.getVelocity() < 1200) {
+            if (shootMotor.getVelocity() < 1350) {
                 shootMotor.setPower(-gamepad1.right_trigger);
             } else {
                 shootMotor.setPower(0);
@@ -150,9 +143,12 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
             shootMotor.setPower(0);
         }
 
-        // Intake on left trigger (reverse sign if needed)
-        intakeMotor.setPower(-gamepad1.left_trigger);
-
+        // Intake on left trigger output on left bumper
+        if(gamepad1.left_bumper){
+            intakeMotor.setPower(gamepad1.left_bumper ? 1.0 : 0.0);
+        } else {
+            intakeMotor.setPower(-gamepad1.left_trigger);
+        }
         // Servos toggle with right bumper
         leftServo.setPosition(gamepad1.right_bumper ? 0.0 : 1.0);
         rightServo.setPosition(gamepad1.right_bumper ? 1.0 : 0.0);
