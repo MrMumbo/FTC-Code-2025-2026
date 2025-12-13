@@ -7,12 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
 import org.firstinspires.ftc.teamcode.mechanisms.HwChasis;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-import java.util.List;
-
-@Autonomous(name = "Close Auto RED", group = "Auto")
-public class AprilTagAuto extends OpMode {
+@Autonomous(name = "Close Auto BLUE", group = "Auto")
+public class AprilTagAuto2 extends OpMode {
     AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
     private HwChasis hwchasis = new HwChasis();
     private boolean running;
@@ -59,10 +56,10 @@ public class AprilTagAuto extends OpMode {
                 inte ++;
             }
             if (inte == 4){
-                hwchasis.frontRight.setPower(-0.5);
-                hwchasis.frontLeft.setPower(-0.5);
-                hwchasis.backRight.setPower(-0.5);
-                hwchasis.backLeft.setPower(0.5);
+                hwchasis.frontRight.setPower(0.5);
+                hwchasis.frontLeft.setPower(0.5);
+                hwchasis.backRight.setPower(0.5);
+                hwchasis.backLeft.setPower(-0.5);
                 try {
                     sleep(1200);
                 } catch (InterruptedException e) {

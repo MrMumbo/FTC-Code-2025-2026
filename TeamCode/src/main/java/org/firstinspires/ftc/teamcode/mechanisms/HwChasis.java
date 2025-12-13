@@ -11,16 +11,18 @@ public class HwChasis {
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor frontLeft;
-    public DcMotor shootPower;
+    public DcMotorEx shootPower;
     public Servo holdLeft;
     public Servo holdRight;
+
+    public double shootVel;
 
     public void init(HardwareMap hwMap) {
         backRight   = hwMap.get(DcMotor.class, "backRight");
         frontRight  = hwMap.get(DcMotor.class, "frontRight");
         backLeft    = hwMap.get(DcMotor.class, "backLeft");
         frontLeft   = hwMap.get(DcMotor.class, "frontLeft");
-        shootPower  = hwMap.get(DcMotor.class, "shootPower");
+        shootPower  = hwMap.get(DcMotorEx.class, "shootPower");
         holdLeft    = hwMap.get(Servo.class,   "holdLeft");
         holdRight   = hwMap.get(Servo.class,   "holdRight");
 
@@ -31,7 +33,9 @@ public class HwChasis {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         holdLeft.setDirection(Servo.Direction.REVERSE);
         holdRight.setDirection(Servo.Direction.FORWARD);
-        shootPower.setDirection(DcMotor.Direction.REVERSE);
+        shootPower.setDirection(DcMotorEx.Direction.REVERSE);
+
+        shootPower.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // reset servos
         holdLeft.setPosition(0.00);

@@ -19,14 +19,14 @@ public class MechanumWheelDrive extends OpMode {
 
     private AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
     private HwChasis hwchasis = new HwChasis();
-    double shootTimer = 0;
 
     public double nY;
     public double nX;
     IMU imu;
     boolean relativeToggle = true;
-    public float selectedAprilTag;
     public boolean selectAT = false;
+    public double ATDis = 0.0f;
+    public double ATRot = 0.0f;
 
     @Override
     public void init() {
@@ -59,28 +59,30 @@ public class MechanumWheelDrive extends OpMode {
             selectAT = !selectAT;
         }
 
-        if (aprilTagWebcam.aprilTagID != 0) {
-            if(selectAT && aprilTagWebcam.aprilTagID == 20){
-                selectedAprilTag = 20;
-            }
-            if(!selectAT && aprilTagWebcam.aprilTagID == 24){
-                selectedAprilTag = 24;
-            }
-        } else {
-            selectedAprilTag = 0;
-        }
-
         float horizantalMovement = gamepad1.left_stick_x;
         float verticalMovement   =  -gamepad1.left_stick_y;
-        float rotationalMovement =  gamepad1.right_stick_x;
+        double rotationalMovement =  gamepad1.right_stick_x;
         float xButton            =  gamepad1.x ? 1.0f : 0.0f;
         float maxPower           = 1f + (xButton / 2.0f);
-        double maxShoot           = aprilTagWebcam.distanceToAprilTag / 100;
+        double maxShoot;
+        if(ATDis < 120){
+            maxShoot = ATDis * 12;
+        } else {
+            maxShoot = ATDis * 12;
+        }
         float loadBall           = gamepad1.right_bumper ? 1.0f : 0.0f;
         float shootBall          = gamepad1.right_trigger;
+        double rotationalMult = ATRot / 30;
+        double backLeft;
+        double frontLeft;
+        double backRight;
+        double frontRight;
 
         if (gamepad1.a) {
             imu.resetYaw();
+        }
+        if (gamepad1.b) {
+            rotationalMovement = -rotationalMult;
         }
 
         if(gamepad1.dpadDownWasPressed()) {relativeToggle = !relativeToggle;}
@@ -89,22 +91,36 @@ public class MechanumWheelDrive extends OpMode {
 
         // drive system (strafe, turn, forward/backward)
         if(!relativeToggle){
-            hwchasis.backLeft.setPower( (-verticalMovement + horizantalMovement - rotationalMovement) * maxPower);
-            hwchasis.frontLeft.setPower((-verticalMovement - horizantalMovement - rotationalMovement) * maxPower);
-            hwchasis.backRight.setPower((-verticalMovement - horizantalMovement + rotationalMovement) * maxPower);
-            hwchasis.frontRight.setPower( (verticalMovement - horizantalMovement - rotationalMovement) * maxPower);
+            backLeft = ((-verticalMovement + horizantalMovement - rotationalMovement) * maxPower);
+            frontLeft = ((-verticalMovement - horizantalMovement - rotationalMovement) * maxPower);
+            backRight = ((-verticalMovement - horizantalMovement + rotationalMovement) * maxPower);
+            frontRight = ((verticalMovement - horizantalMovement - rotationalMovement) * maxPower);
         } else {
-            hwchasis.backLeft.setPower( (-nY - nX - rotationalMovement) * maxPower);
-            hwchasis.frontLeft.setPower((-nY + nX - rotationalMovement) * maxPower);
-            hwchasis.backRight.setPower((-nY + nX + rotationalMovement) * maxPower);
-            hwchasis.frontRight.setPower( (nY + nX - rotationalMovement) * maxPower);
+            backLeft = ((-nY - nX - rotationalMovement) * maxPower);
+            frontLeft = ((-nY + nX - rotationalMovement) * maxPower);
+            backRight = ((-nY + nX + rotationalMovement) * maxPower);
+            frontRight = ((nY + nX - rotationalMovement) * maxPower);
         }
 
+        hwchasis.backLeft.setPower(backLeft);
+        hwchasis.backRight.setPower(backRight);
+        hwchasis.frontLeft.setPower(frontLeft);
+        hwchasis.frontRight.setPower(frontRight);
+
         // shoot motors
-        //TEMP
-        maxShoot = 2.0f;
-        //TEMP
-        hwchasis.shootPower.setPower(shootBall * maxShoot);
+        if (!gamepad1.b){
+            if (-hwchasis.shootPower.getVelocity() < 1200){
+                hwchasis.shootPower.setPower(shootBall);
+            } else {
+                hwchasis.shootPower.setPower(0);
+            }
+        } else {
+            if (-hwchasis.shootPower.getVelocity() < maxShoot){
+                hwchasis.shootPower.setPower(shootBall);
+            } else {
+                hwchasis.shootPower.setPower(0);
+            }
+        }
 
         hwchasis.holdLeft.setPosition(loadBall);
         hwchasis.holdRight.setPosition(loadBall);
@@ -126,29 +142,48 @@ public class MechanumWheelDrive extends OpMode {
         aprilTagWebcam.update();
 
         java.util.List<AprilTagDetection> detections = aprilTagWebcam.getDetectedTags();
-        telemetry.addData("Tag count", detections.size());
 
         if (!detections.isEmpty()) {
             AprilTagDetection tag = detections.get(0);
             if (tag.id == 24 || tag.id == 20){
-                if (selectedAprilTag == 24 || selectedAprilTag == 20){
-                    aprilTagWebcam.displayDetectionTelemetry(tag);
+                if(selectAT && tag.id == 20){
+                    telemetry.addData("Selected AT", tag.id);
+                    telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
+                    telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
+                    ATRot = tag.ftcPose.bearing + 16;
+                    ATDis = tag.ftcPose.y;
+                } else {
+                    if (selectAT){
+                        ATDis = 0.0f;
+                        ATRot = 0.0f;
+                    }
+                }
+
+                if(!selectAT && tag.id == 24){
+                    telemetry.addData("Selected AT", tag.id);
+                    telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
+                    telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
+                    ATRot = tag.ftcPose.bearing + 16;
+                    ATDis = tag.ftcPose.y;
+                } else {
+                    if (!selectAT){
+                        ATDis = 0.0f;
+                        ATRot = 0.0f;
+                    }
                 }
             }
-
-            telemetry.addData("Tag ID", tag.id);
-            telemetry.addData("Tag range (in)", tag.ftcPose.range);
         } else {
             telemetry.addLine("No tags detected");
+            ATDis = 0.0f;
+            ATRot = 0.0f;
         }
 
         telemetry.addData("speed",               "%.2f", maxPower);
         telemetry.addData("ball load",           "%.2f", loadBall);
         telemetry.addData("ball shoot",          "%.2f", shootBall);
-        telemetry.addData("rotation to AT",          "%.2f", aprilTagWebcam.rotationToAprilTag);
-        telemetry.addData("distance to AT (cm)",          "%.2f", aprilTagWebcam.distanceToAprilTag);
         telemetry.addData("motorSpeed through AT transitor",          "%.2f", maxShoot);
-        telemetry.addData("Selected AT", "%.2f", selectedAprilTag);
+        telemetry.addData("Shooter Velocity", "%.2f", -hwchasis.shootPower.getVelocity());
+        telemetry.addLine("");
 
         if(relativeToggle){
             telemetry.addLine("Using Field Relative");

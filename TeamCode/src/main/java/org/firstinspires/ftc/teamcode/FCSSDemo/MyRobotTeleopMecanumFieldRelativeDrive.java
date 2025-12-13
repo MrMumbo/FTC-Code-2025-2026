@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.FCSSDemo;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
+@Disabled
 @TeleOp(name = "Test : Do NOT TOUCH", group = "Test")
 public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
     private AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
@@ -36,6 +38,9 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
     private float nX;
     private float nY;
+    private double ATRot;
+    private double ATMov;
+    private  double ATSel;
 
     @Override
     public void init() {
@@ -88,8 +93,14 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
             telemetry.addData("Tag ID", tag.id);
             telemetry.addData("Tag range (in)", tag.ftcPose.range);
+            ATRot = tag.ftcPose.bearing;
+            ATMov = tag.ftcPose.y;
+            ATSel = tag.id;
         } else {
             telemetry.addLine("No tags detected");
+            ATRot = 0.0f;
+            ATMov = 0.0f;
+            ATSel = 0.0f;
         }
 
         double y  = -gamepad1.left_stick_y;  // forward/back
@@ -100,10 +111,10 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         if (detections.isEmpty()){
             aRx = 0;
         } else {
-            if (aprilTagWebcam.rotationToAprilTag > 0){
-                aRx = -(aprilTagWebcam.rotationToAprilTag / 30);
+            if (ATRot > 0){
+                aRx = -(ATRot / 30);
             } else{
-                aRx = -(aprilTagWebcam.rotationToAprilTag / 30);
+                aRx = -(ATRot / 30);
             }
         }
 
@@ -119,7 +130,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
             frontRightPower = (-nX - nY + rx);
             backRightPower  = (nX - nY + rx);
         } else {
-            if(aprilTagWebcam.aprilTagID == 24 ){
+            if(ATSel == 24 ){
                 frontLeftPower  = (aRx + nY - nX);
                 backLeftPower   = (nX + nY + aRx);
                 frontRightPower = (-nX - nY + aRx);
@@ -163,8 +174,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         telemetry.addData("BR", "%.2f", backRightPower);
         telemetry.addData("Shooter velocity", "%.0f", shootMotor.getVelocity());
         telemetry.addData("IMU:", "%.2f", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-        telemetry.addData("RotationToAprilTag", "%.2f", aprilTagWebcam.rotationToAprilTag);
-        telemetry.addData("AprilTagID", "%.2f", aprilTagWebcam.aprilTagID);
+        telemetry.addData("RotationToAprilTag", "%.2f", ATRot);
+        telemetry.addData("AprilTagID", "%.2f", ATSel);
         telemetry.update();
     }
 
