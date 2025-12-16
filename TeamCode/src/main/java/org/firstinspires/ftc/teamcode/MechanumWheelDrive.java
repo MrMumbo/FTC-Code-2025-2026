@@ -64,12 +64,9 @@ public class MechanumWheelDrive extends OpMode {
         double rotationalMovement =  gamepad1.right_stick_x;
         float xButton            =  gamepad1.x ? 1.0f : 0.0f;
         float maxPower           = 1f + (xButton / 2.0f);
+        double robDis = Math.sqrt(Math.pow(ATDis, 2)-Math.pow(29.5,2));
         double maxShoot;
-        if(ATDis < 120){
-            maxShoot = ATDis * 12;
-        } else {
-            maxShoot = ATDis * 12;
-        }
+        maxShoot = (Math.pow(((robDis+70)*645.7), 0.613));
         float loadBall           = gamepad1.right_bumper ? 1.0f : 0.0f;
         float shootBall          = gamepad1.right_trigger;
         double rotationalMult = ATRot / 30;
