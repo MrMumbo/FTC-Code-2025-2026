@@ -27,6 +27,8 @@ public class MechanumWheelDrive extends OpMode {
     public boolean selectAT = false;
     public double ATDis = 0.0f;
     public double ATRot = 0.0f;
+    public double ATTag = 0.0f;
+    public double realRot = 0.0f;
 
     @Override
     public void init() {
@@ -66,7 +68,11 @@ public class MechanumWheelDrive extends OpMode {
         float maxPower           = 1f + (xButton / 2.0f);
         double robDis = Math.sqrt(Math.pow(ATDis, 2)-Math.pow(29.5,2));
         double maxShoot;
-        maxShoot = (Math.pow(((robDis+70)*645.7), 0.613));
+        if(ATDis > 110){
+            maxShoot = (Math.pow(((robDis+75)*645.7), 0.613));
+        }else {
+            maxShoot = (Math.pow(((robDis+90)*645.7), 0.613));
+        }
         float loadBall           = gamepad1.right_bumper ? 1.0f : 0.0f;
         float shootBall          = gamepad1.right_trigger;
         double rotationalMult = ATRot / 30;
@@ -78,8 +84,10 @@ public class MechanumWheelDrive extends OpMode {
         if (gamepad1.a) {
             imu.resetYaw();
         }
-        if (gamepad1.b) {
-            rotationalMovement = -rotationalMult;
+        if (!gamepad1.b) {
+            if (ATTag != 0){
+                rotationalMovement = -rotationalMult;
+            }
         }
 
         if(gamepad1.dpadDownWasPressed()) {relativeToggle = !relativeToggle;}
@@ -105,7 +113,7 @@ public class MechanumWheelDrive extends OpMode {
         hwchasis.frontRight.setPower(frontRight);
 
         // shoot motors
-        if (!gamepad1.b){
+        if (gamepad1.b){
             if (-hwchasis.shootPower.getVelocity() < 1200){
                 hwchasis.shootPower.setPower(shootBall);
             } else {
@@ -147,12 +155,16 @@ public class MechanumWheelDrive extends OpMode {
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
                     telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
-                    ATRot = tag.ftcPose.bearing + 16;
+                    ATRot = tag.ftcPose.bearing + 8;
+                    realRot = tag.ftcPose.bearing - 8;
                     ATDis = tag.ftcPose.y;
+                    ATTag = tag.id;
                 } else {
                     if (selectAT){
+                        realRot = 0.0f;
                         ATDis = 0.0f;
                         ATRot = 0.0f;
+                        ATTag = 0.0f;
                     }
                 }
 
@@ -160,24 +172,31 @@ public class MechanumWheelDrive extends OpMode {
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
                     telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
-                    ATRot = tag.ftcPose.bearing + 16;
+                    ATRot = tag.ftcPose.bearing + 8;
+                    realRot = tag.ftcPose.bearing - 8;
                     ATDis = tag.ftcPose.y;
+                    ATTag = tag.id;
                 } else {
                     if (!selectAT){
                         ATDis = 0.0f;
                         ATRot = 0.0f;
+                        ATTag = 0.0f;
+                        realRot = 0.0f;
                     }
                 }
             }
         } else {
             telemetry.addLine("No tags detected");
             ATDis = 0.0f;
+            ATTag = 0.0f;
+            realRot = 0.0f;
             ATRot = 0.0f;
         }
 
         telemetry.addData("speed",               "%.2f", maxPower);
         telemetry.addData("ball load",           "%.2f", loadBall);
         telemetry.addData("ball shoot",          "%.2f", shootBall);
+        telemetry.addData("realRot", realRot);
         telemetry.addData("motorSpeed through AT transitor",          "%.2f", maxShoot);
         telemetry.addData("Shooter Velocity", "%.2f", -hwchasis.shootPower.getVelocity());
         telemetry.addLine("");
