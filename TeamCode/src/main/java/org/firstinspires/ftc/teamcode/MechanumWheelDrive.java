@@ -29,6 +29,7 @@ public class MechanumWheelDrive extends OpMode {
     public double ATRot = 0.0f;
     public double ATTag = 0.0f;
     public double realRot = 0.0f;
+    boolean bToggle = true;
 
     @Override
     public void init() {
@@ -68,7 +69,7 @@ public class MechanumWheelDrive extends OpMode {
         float maxPower           = 1f + (xButton / 2.0f);
         double robDis = Math.sqrt(Math.pow(ATDis, 2)-Math.pow(29.5,2));
         double maxShoot;
-        if(ATDis > 110){
+        if(ATDis > 125){
             maxShoot = (Math.pow(((robDis+75)*645.7), 0.613));
         }else {
             maxShoot = (Math.pow(((robDis+90)*645.7), 0.613));
@@ -81,10 +82,14 @@ public class MechanumWheelDrive extends OpMode {
         double backRight;
         double frontRight;
 
+        if(gamepad1.b){
+            bToggle = !bToggle;
+        }
+
         if (gamepad1.a) {
             imu.resetYaw();
         }
-        if (!gamepad1.b) {
+        if (bToggle) {
             if (ATTag != 0){
                 rotationalMovement = -rotationalMult;
             }
@@ -112,12 +117,22 @@ public class MechanumWheelDrive extends OpMode {
         hwchasis.frontLeft.setPower(frontLeft);
         hwchasis.frontRight.setPower(frontRight);
 
-        // shoot motors
-        if (gamepad1.b){
+        // shoot motors & servos
+        if (!bToggle){
             if (-hwchasis.shootPower.getVelocity() < 1200){
                 hwchasis.shootPower.setPower(shootBall);
             } else {
                 hwchasis.shootPower.setPower(0);
+            }
+
+            if(-hwchasis.shootPower.getVelocity() > (1150)){
+                if(loadBall == 1){
+                    hwchasis.holdLeft.setPosition(1);
+                    hwchasis.holdRight.setPosition(1);
+                } else {
+                    hwchasis.holdLeft.setPosition(0);
+                    hwchasis.holdRight.setPosition(0);
+                }
             }
         } else {
             if (-hwchasis.shootPower.getVelocity() < maxShoot){
@@ -125,12 +140,19 @@ public class MechanumWheelDrive extends OpMode {
             } else {
                 hwchasis.shootPower.setPower(0);
             }
+
+            if(-hwchasis.shootPower.getVelocity() > (maxShoot-50) && -hwchasis.shootPower.getVelocity() < (maxShoot+50) ){
+                if(loadBall == 1){
+                    hwchasis.holdLeft.setPosition(1);
+                    hwchasis.holdRight.setPosition(1);
+                } else {
+                    hwchasis.holdLeft.setPosition(0);
+                    hwchasis.holdRight.setPosition(0);
+                }
+            }
         }
 
-        hwchasis.holdLeft.setPosition(loadBall);
-        hwchasis.holdRight.setPosition(loadBall);
-
-        // braking movement system
+        // breaking movement system
         if (horizantalMovement == 0.0f && verticalMovement == 0.0f && rotationalMovement == 0.0f) {
             hwchasis.backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             hwchasis.backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -142,6 +164,8 @@ public class MechanumWheelDrive extends OpMode {
         if (shootBall == 0.0f) {
             hwchasis.shootPower.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
+
+        telemetry.addData("bToggle", bToggle);
 
         //apriltag
         aprilTagWebcam.update();
