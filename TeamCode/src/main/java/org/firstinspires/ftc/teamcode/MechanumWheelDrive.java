@@ -81,8 +81,14 @@ public class MechanumWheelDrive extends OpMode {
         double frontLeft;
         double backRight;
         double frontRight;
+        boolean lightEnabled = ATTag != 0;
 
-        if(gamepad1.b){
+        hwchasis.LED1.enableLight(lightEnabled);
+        hwchasis.LED2.enableLight(lightEnabled);
+        hwchasis.LED3.enableLight(lightEnabled);
+        hwchasis.LED4.enableLight(lightEnabled);
+
+        if(gamepad1.bWasPressed()){
             bToggle = !bToggle;
         }
 
@@ -179,8 +185,8 @@ public class MechanumWheelDrive extends OpMode {
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
                     telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
-                    ATRot = tag.ftcPose.bearing + 8;
-                    realRot = tag.ftcPose.bearing - 8;
+                    ATRot = tag.ftcPose.bearing + 4;
+                    realRot = tag.ftcPose.bearing - 4;
                     ATDis = tag.ftcPose.y;
                     ATTag = tag.id;
                 } else {
@@ -196,8 +202,8 @@ public class MechanumWheelDrive extends OpMode {
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
                     telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
-                    ATRot = tag.ftcPose.bearing + 8;
-                    realRot = tag.ftcPose.bearing - 8;
+                    ATRot = tag.ftcPose.bearing + 4;
+                    realRot = tag.ftcPose.bearing - 4;
                     ATDis = tag.ftcPose.y;
                     ATTag = tag.id;
                 } else {

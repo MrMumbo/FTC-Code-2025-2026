@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class HwChasis {
@@ -11,6 +12,10 @@ public class HwChasis {
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor frontLeft;
+    public LED LED1;
+    public LED LED2;
+    public LED LED3;
+    public LED LED4;
     public DcMotorEx shootPower;
     public Servo holdLeft;
     public Servo holdRight;
@@ -25,6 +30,10 @@ public class HwChasis {
         shootPower  = hwMap.get(DcMotorEx.class, "shootPower");
         holdLeft    = hwMap.get(Servo.class,   "holdLeft");
         holdRight   = hwMap.get(Servo.class,   "holdRight");
+        LED1 = hwMap.get(LED.class,"LED1");
+        LED2 = hwMap.get(LED.class,"LED2");
+        LED3 = hwMap.get(LED.class,"LED3");
+        LED4 = hwMap.get(LED.class,"LED4");
 
         // set motor directions
         backLeft.setDirection(DcMotor.Direction.REVERSE);
