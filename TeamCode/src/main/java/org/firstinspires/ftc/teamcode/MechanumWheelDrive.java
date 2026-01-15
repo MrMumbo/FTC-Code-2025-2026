@@ -69,10 +69,10 @@ public class MechanumWheelDrive extends OpMode {
         float maxPower           = 1f + (xButton / 2.0f);
         double robDis = Math.sqrt(Math.pow(ATDis, 2)-Math.pow(29.5,2));
         double maxShoot;
-        if(ATDis > 125){
+        if(ATDis > 165){
             maxShoot = (Math.pow(((robDis+75)*645.7), 0.613));
         }else {
-            maxShoot = (Math.pow(((robDis+90)*645.7), 0.613));
+            maxShoot = (Math.pow(((robDis+100)*645.7), 0.613));
         }
         float loadBall           = gamepad1.right_bumper ? 1.0f : 0.0f;
         float shootBall          = gamepad1.right_trigger;
@@ -83,10 +83,37 @@ public class MechanumWheelDrive extends OpMode {
         double frontRight;
         boolean lightEnabled = ATTag != 0;
 
-        hwchasis.LED1.enableLight(lightEnabled);
-        hwchasis.LED2.enableLight(lightEnabled);
-        hwchasis.LED3.enableLight(lightEnabled);
-        hwchasis.LED4.enableLight(lightEnabled);
+        if(bToggle){
+            if(lightEnabled){
+                hwchasis.LED1green.enableLight(true);
+                hwchasis.LED2green.enableLight(true);
+                hwchasis.LED3green.enableLight(true);
+                hwchasis.LED4green.enableLight(true);
+                hwchasis.LED1red.enableLight(false);
+                hwchasis.LED2red.enableLight(false);
+                hwchasis.LED3red.enableLight(false);
+                hwchasis.LED4red.enableLight(false);
+            } else {
+                hwchasis.LED1green.enableLight(false);
+                hwchasis.LED2green.enableLight(false);
+                hwchasis.LED3green.enableLight(false);
+                hwchasis.LED4green.enableLight(false);
+                hwchasis.LED1red.enableLight(true);
+                hwchasis.LED2red.enableLight(true);
+                hwchasis.LED3red.enableLight(true);
+                hwchasis.LED4red.enableLight(true);
+            }
+        } else {
+            hwchasis.LED1green.enableLight(false);
+            hwchasis.LED2green.enableLight(false);
+            hwchasis.LED3green.enableLight(false);
+            hwchasis.LED4green.enableLight(false);
+            hwchasis.LED1red.enableLight(false);
+            hwchasis.LED2red.enableLight(false);
+            hwchasis.LED3red.enableLight(false);
+            hwchasis.LED4red.enableLight(false);
+        }
+
 
         if(gamepad1.bWasPressed()){
             bToggle = !bToggle;
@@ -185,8 +212,8 @@ public class MechanumWheelDrive extends OpMode {
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
                     telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
-                    ATRot = tag.ftcPose.bearing + 4;
-                    realRot = tag.ftcPose.bearing - 4;
+                    ATRot = tag.ftcPose.bearing;
+                    realRot = tag.ftcPose.bearing;
                     ATDis = tag.ftcPose.y;
                     ATTag = tag.id;
                 } else {
@@ -202,8 +229,8 @@ public class MechanumWheelDrive extends OpMode {
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
                     telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
-                    ATRot = tag.ftcPose.bearing + 4;
-                    realRot = tag.ftcPose.bearing - 4;
+                    ATRot = tag.ftcPose.bearing;
+                    realRot = tag.ftcPose.bearing;
                     ATDis = tag.ftcPose.y;
                     ATTag = tag.id;
                 } else {

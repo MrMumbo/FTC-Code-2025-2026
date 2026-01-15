@@ -12,10 +12,14 @@ public class HwChasis {
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor frontLeft;
-    public LED LED1;
-    public LED LED2;
-    public LED LED3;
-    public LED LED4;
+    public LED LED1red;
+    public LED LED2red;
+    public LED LED3red;
+    public LED LED4red;
+    public LED LED1green;
+    public LED LED2green;
+    public LED LED3green;
+    public LED LED4green;
     public DcMotorEx shootPower;
     public Servo holdLeft;
     public Servo holdRight;
@@ -30,10 +34,14 @@ public class HwChasis {
         shootPower  = hwMap.get(DcMotorEx.class, "shootPower");
         holdLeft    = hwMap.get(Servo.class,   "holdLeft");
         holdRight   = hwMap.get(Servo.class,   "holdRight");
-        LED1 = hwMap.get(LED.class,"LED1");
-        LED2 = hwMap.get(LED.class,"LED2");
-        LED3 = hwMap.get(LED.class,"LED3");
-        LED4 = hwMap.get(LED.class,"LED4");
+        LED1red = hwMap.get(LED.class,"LED1red");
+        LED2red = hwMap.get(LED.class,"LED2red");
+        LED3red = hwMap.get(LED.class,"LED3red");
+        LED4red = hwMap.get(LED.class,"LED4red");
+        LED1green = hwMap.get(LED.class,"LED1green");
+        LED2green = hwMap.get(LED.class,"LED2green");
+        LED3green = hwMap.get(LED.class,"LED3green");
+        LED4green = hwMap.get(LED.class,"LED4green");
 
         // set motor directions
         backLeft.setDirection(DcMotor.Direction.REVERSE);
