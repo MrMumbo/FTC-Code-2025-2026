@@ -7,6 +7,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.teamcode.mechanisms.WebcamConfig;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +29,19 @@ public class AprilTagWebcam {
         this.telemetry = telemetry;
 
         aprilTagProcessor = new AprilTagProcessor.Builder()
-            .setDrawTagID(true)
-            .setDrawTagOutline(true)
-            .setDrawAxes(true)
-            .setDrawCubeProjection(true)
-            .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
-            .build();
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
+                .build();
 
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hwMap.get(WebcamName.class, "Webcam 1"));
-        builder.setCameraResolution(new Size(640, 480));
-        builder.addProcessor(aprilTagProcessor);
-
-        visionPortal = builder.build();
+        visionPortal = WebcamConfig.buildVisionPortal(
+                hwMap,
+                aprilTagProcessor
+        );
     }
+
 
     public void update(){
         detectedTags = aprilTagProcessor.getDetections();
