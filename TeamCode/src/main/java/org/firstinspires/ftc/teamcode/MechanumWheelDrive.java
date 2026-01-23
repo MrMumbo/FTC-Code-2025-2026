@@ -124,7 +124,7 @@ public class MechanumWheelDrive extends OpMode {
         }
         if (bToggle) {
             if (ATTag != 0){
-                rotationalMovement = -rotationalMult;
+                rotationalMovement = -rotationalMult * 0.5;
             }
         }
 
@@ -211,7 +211,7 @@ public class MechanumWheelDrive extends OpMode {
                 if(selectAT && tag.id == 20){
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
-                    telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
+                    telemetry.addData("rotation to AT (deg)", tag.ftcPose.bearing);
                     ATRot = tag.ftcPose.bearing;
                     realRot = tag.ftcPose.bearing;
                     ATDis = tag.ftcPose.y;
@@ -228,7 +228,7 @@ public class MechanumWheelDrive extends OpMode {
                 if(!selectAT && tag.id == 24){
                     telemetry.addData("Selected AT", tag.id);
                     telemetry.addData("distance to AT (cm)", tag.ftcPose.y);
-                    telemetry.addData("rotation to AT (cm)", tag.ftcPose.bearing);
+                    telemetry.addData("rotation to AT (deg)", tag.ftcPose.bearing);
                     ATRot = tag.ftcPose.bearing;
                     realRot = tag.ftcPose.bearing;
                     ATDis = tag.ftcPose.y;

@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 
+
 public class WebcamConfig {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;

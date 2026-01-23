@@ -34,6 +34,12 @@ public class AprilTagWebcam {
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
+                .setLensIntrinsics(
+                        937.817075,  // fx
+                        933.067987,  // fy
+                        651.251824,  // cx
+                        400.472133   // cy
+                )
                 .build();
 
         visionPortal = WebcamConfig.buildVisionPortal(
