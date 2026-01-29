@@ -69,11 +69,7 @@ public class MechanumWheelDrive extends OpMode {
         float maxPower           = 1f + (xButton / 2.0f);
         double robDis = Math.sqrt(Math.pow(ATDis, 2)-Math.pow(29.5,2));
         double maxShoot;
-        if(ATDis > 165){
-            maxShoot = (Math.pow(((robDis+75)*645.7), 0.613));
-        }else {
-            maxShoot = (Math.pow(((robDis+100)*645.7), 0.613));
-        }
+        maxShoot = (robDis * 3) + 1000;
         float loadBall           = gamepad1.right_bumper ? 1.0f : 0.0f;
         float shootBall          = gamepad1.right_trigger;
         double rotationalMult = ATRot / 30;
@@ -82,6 +78,7 @@ public class MechanumWheelDrive extends OpMode {
         double backRight;
         double frontRight;
         boolean lightEnabled = ATTag != 0;
+        double tickPerRev = 28;
 
         if(bToggle){
             if(lightEnabled){
@@ -151,11 +148,12 @@ public class MechanumWheelDrive extends OpMode {
         hwchasis.frontRight.setPower(frontRight);
 
         // shoot motors & servos
+        double shootSpeed = ((maxShoot * tickPerRev) / 60) * shootBall;
         if (!bToggle){
             if (-hwchasis.shootPower.getVelocity() < 1200){
-                hwchasis.shootPower.setPower(shootBall);
+                hwchasis.shootPower.setVelocity(shootSpeed);
             } else {
-                hwchasis.shootPower.setPower(0);
+                hwchasis.shootPower.setVelocity(0);
             }
 
             if(-hwchasis.shootPower.getVelocity() > (1150)){
@@ -169,9 +167,9 @@ public class MechanumWheelDrive extends OpMode {
             }
         } else {
             if (-hwchasis.shootPower.getVelocity() < maxShoot){
-                hwchasis.shootPower.setPower(shootBall);
+                hwchasis.shootPower.setVelocity(shootSpeed);
             } else {
-                hwchasis.shootPower.setPower(0);
+                hwchasis.shootPower.setVelocity(0);
             }
 
             if(-hwchasis.shootPower.getVelocity() > (maxShoot-50) && -hwchasis.shootPower.getVelocity() < (maxShoot+50) ){
@@ -195,7 +193,7 @@ public class MechanumWheelDrive extends OpMode {
 
         // stop flywheel
         if (shootBall == 0.0f) {
-            hwchasis.shootPower.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            hwchasis.shootPower.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
         telemetry.addData("bToggle", bToggle);
@@ -220,7 +218,7 @@ public class MechanumWheelDrive extends OpMode {
                     if (selectAT){
                         realRot = 0.0f;
                         ATDis = 0.0f;
-                        ATRot = 0.0f;
+                        ATRot = 4.0f;
                         ATTag = 0.0f;
                     }
                 }
@@ -236,7 +234,7 @@ public class MechanumWheelDrive extends OpMode {
                 } else {
                     if (!selectAT){
                         ATDis = 0.0f;
-                        ATRot = 0.0f;
+                        ATRot = 4.0f;
                         ATTag = 0.0f;
                         realRot = 0.0f;
                     }
