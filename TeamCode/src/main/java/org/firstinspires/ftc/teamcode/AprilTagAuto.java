@@ -64,7 +64,7 @@ public class AprilTagAuto extends OpMode {
                 hwchasis.backRight.setPower(-0.5);
                 hwchasis.backLeft.setPower(0.5);
                 try {
-                    sleep(500);
+                    sleep(750);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
